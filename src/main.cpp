@@ -1,24 +1,44 @@
-
 #include <iostream>
-int main()
+#include <vector>
+#include <fstream>
+
+int main(int argc, char *argv[])
 {
     try
     {
-        std::cout << "example: " << std::endl;
+        if (argc != 2) {
+            std::cout << "Wrong amount arguments" << std::endl;
+            return 1;
+        }
+        std::cout << argv[1] << std::endl;
+        std::vector<std::string> str;
+
+        for(std::string line; std::getline(std::cin, line);)
+        {
+            str.push_back(line);
+        }
+
+
+        std::ofstream myfile;
+        myfile.open("bulk.log");
+        myfile << "__________" << std::endl;
+        for (auto var : str)
+        {
+            std::cout << var << std::endl;
+            myfile << var <<std::endl;
+        }
+        myfile.close();
+
 
     }
     catch (std::exception& e)
     {
-
         std::cout << e.what() << std::endl;
     }
 
 
     return 0;
 }
-
-
-
 
 
 
