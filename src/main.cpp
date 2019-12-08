@@ -2,54 +2,71 @@
 #include <vector>
 #include <fstream>
 
-class Command
-{
-    std::string cmd1;
-};
+//class Command
+//{
+//    std::string cmd1;
+//};
 class Packet;
 
-class Observer{
+class Observer
+{
 public:
-    virtual void update() = 0;
-    //virtual ~Observer() {}
+    virtual void update(Packet *pack) = 0;
 };
 
-class Packet {
+class Packet
+{
 
-    std::string str;
     std::vector<Observer *> subs;
 
 public:
+    std::vector<std::string> commands;
+    void setstring(std::string str) {
+        commands.push_back(str);
+    }
+
     void subscribe(Observer *obs) {
         subs.push_back(obs);
     }
 
     void notify() {
         for (auto s : subs) {
-            s->update();
+            s->update(this);
         }
     }
 };
 
-class Cmd_Observer : public Observer {
+class Cmd_Observer : public Observer
+{
 public:
     Cmd_Observer(Packet *pack) {
         pack->subscribe(this);
     }
 
-    void update() override {
+    void update(Packet *pack) override {
         std::cout << "CMD out "  << std::endl;
+        std::cout << "bulk: ";
+        for (auto var : pack->commands)
+        {
+            std::cout << var << ", ";
+        }
+        std::cout << std::endl;
     }
 };
 
-class File_Observer : public Observer {
+class File_Observer : public Observer
+{
 public:
     File_Observer(Packet *pack) {
         pack->subscribe(this);
     }
 
-    void update() override {
+    void update(Packet *pack) override {
         std::cout << "File out " << std::endl;
+        for (auto var : pack->commands)
+        {
+            std::cout << var << ", ";
+        }
     }
 };
 
@@ -66,6 +83,12 @@ int main(int argc, char *argv[])
         Packet pack;
         Cmd_Observer cmdob(&pack);
         File_Observer fileobs(&pack);
+
+        for(std::string line; std::getline(std::cin, line);)
+        {
+            pack.setstring(line);
+            //str.push_back(line);
+        }
 
         pack.notify();
         //    report_observer rpt(&lang);
