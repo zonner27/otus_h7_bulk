@@ -2,6 +2,57 @@
 #include <vector>
 #include <fstream>
 
+class Command
+{
+    std::string cmd1;
+};
+class Packet;
+
+class Observer{
+public:
+    virtual void update() = 0;
+    //virtual ~Observer() {}
+};
+
+class Packet {
+
+    std::string str;
+    std::vector<Observer *> subs;
+
+public:
+    void subscribe(Observer *obs) {
+        subs.push_back(obs);
+    }
+
+    void notify() {
+        for (auto s : subs) {
+            s->update();
+        }
+    }
+};
+
+class Cmd_Observer : public Observer {
+public:
+    Cmd_Observer(Packet *pack) {
+        pack->subscribe(this);
+    }
+
+    void update() override {
+        std::cout << "CMD out "  << std::endl;
+    }
+};
+
+class File_Observer : public Observer {
+public:
+    File_Observer(Packet *pack) {
+        pack->subscribe(this);
+    }
+
+    void update() override {
+        std::cout << "File out " << std::endl;
+    }
+};
+
 int main(int argc, char *argv[])
 {
     try
@@ -11,23 +62,32 @@ int main(int argc, char *argv[])
             return 1;
         }
         std::cout << argv[1] << std::endl;
-        std::vector<std::string> str;
 
-        for(std::string line; std::getline(std::cin, line);)
-        {
-            str.push_back(line);
-        }
+        Packet pack;
+        Cmd_Observer cmdob(&pack);
+        File_Observer fileobs(&pack);
+
+        pack.notify();
+        //    report_observer rpt(&lang);
+        //    ui_observer ui(&lang);
+
+//        std::vector<std::string> str;
+
+//        for(std::string line; std::getline(std::cin, line);)
+//        {
+//            str.push_back(line);
+//        }
 
 
-        std::ofstream myfile;
-        myfile.open("bulk.log");
-        myfile << "__________" << std::endl;
-        for (auto var : str)
-        {
-            std::cout << var << std::endl;
-            myfile << var <<std::endl;
-        }
-        myfile.close();
+//        std::ofstream myfile;
+//        myfile.open("bulk.log");
+//        myfile << "__________" << std::endl;
+//        for (auto var : str)
+//        {
+//            std::cout << var << std::endl;
+//            myfile << var <<std::endl;
+//        }
+//        myfile.close();
 
 
     }
