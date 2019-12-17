@@ -1,6 +1,9 @@
 #include <iostream>
 #include <vector>
 #include <fstream>
+#include <chrono>
+#include <ctime>
+#include <iomanip>
 
 //class Command
 //{
@@ -11,16 +14,15 @@ class Packet;
 class Observer
 {
 public:
-    virtual void update(Packet *pack) = 0;
+    virtual void update(std::string str) = 0;
 };
 
 class Packet
 {
-
     std::vector<Observer *> subs;
+    std::vector<std::string> commands;
 
 public:
-    std::vector<std::string> commands;
     void setstring(std::string str) {
         commands.push_back(str);
     }
@@ -30,8 +32,11 @@ public:
     }
 
     void notify() {
+        
+        
         for (auto s : subs) {
-            s->update(this);
+            for (auto str: commands)
+                s->update(str);
         }
     }
 };
@@ -43,13 +48,12 @@ public:
         pack->subscribe(this);
     }
 
-    void update(Packet *pack) override {
-        std::cout << "CMD out "  << std::endl;
-        std::cout << "bulk: ";
-        for (auto var : pack->commands)
-        {
-            std::cout << var << ", ";
-        }
+    void update(std::string str) override {
+        std::cout << str;
+//        for (auto var : pack->commands)
+//        {
+//            std::cout << var << ", ";
+//        }
         std::cout << std::endl;
     }
 };
@@ -61,12 +65,12 @@ public:
         pack->subscribe(this);
     }
 
-    void update(Packet *pack) override {
-        std::cout << "File out " << std::endl;
-        for (auto var : pack->commands)
-        {
-            std::cout << var << ", ";
-        }
+    void update(std::string str) override {
+        std::cout << str << ", ";
+//        for (auto var : pack->commands)
+//        {
+//            std::cout << var << ", ";
+//        }
     }
 };
 
@@ -91,6 +95,20 @@ int main(int argc, char *argv[])
         }
 
         pack.notify();
+
+//        std::chrono::system_clock::duration  m_time;
+//        //m_time = std::chrono::system_clock::now();
+
+//        std::cout << std::to_string(m_time.) << std::endl;
+
+
+//        std::chrono::time_point<std::chrono::system_clock> now;
+//        now = std::chrono::system_clock::now();
+//        std::time_t now_c = std::chrono::system_clock::to_time_t(now - std::chrono::hours(24));
+//        std::cout << "One day ago, the time was "
+//                  << std::put_time(std::localtime(&now_c), "%F %T") << '\n';
+//        std::cout << std::to_string(now) << std::endl;
+
         //    report_observer rpt(&lang);
         //    ui_observer ui(&lang);
 
