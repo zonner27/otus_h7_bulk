@@ -27,9 +27,7 @@ public:
         subs.push_back(obs);
     }
 
-    void notify() {
-        
-        
+    void notify() {     
         for (auto s : subs) {
             for (auto str: commands)
                 s->update(str);
