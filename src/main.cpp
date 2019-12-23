@@ -5,10 +5,6 @@
 #include <ctime>
 #include <iomanip>
 
-//class Command
-//{
-//    std::string cmd1;
-//};
 class Packet;
 
 class Observer
@@ -91,23 +87,21 @@ int main(int argc, char *argv[])
         for(std::string line; std::getline(std::cin, line);)
         {
             pack.setstring(line);
-            //str.push_back(line);
         }
 
         pack.notify();
 
-//        std::chrono::system_clock::duration  m_time;
-//        //m_time = std::chrono::system_clock::now();
 
-//        std::cout << std::to_string(m_time.) << std::endl;
+        std::chrono::time_point<std::chrono::system_clock> start_time;
+        start_time = std::chrono::system_clock::now();
+        std::time_t time_t = std::chrono::system_clock::to_time_t(start_time);
+        std::string time_command = std::to_string(time_t);
+        std::cout << time_command << std::endl;
+
+//        std::cout << std::to_string(m_time) << std::endl;
 
 
-//        std::chrono::time_point<std::chrono::system_clock> now;
-//        now = std::chrono::system_clock::now();
-//        std::time_t now_c = std::chrono::system_clock::to_time_t(now - std::chrono::hours(24));
-//        std::cout << "One day ago, the time was "
-//                  << std::put_time(std::localtime(&now_c), "%F %T") << '\n';
-//        std::cout << std::to_string(now) << std::endl;
+
 
         //    report_observer rpt(&lang);
         //    ui_observer ui(&lang);
