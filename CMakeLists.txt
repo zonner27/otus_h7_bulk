@@ -13,8 +13,11 @@ include_directories(SYSTEM ${GTEST_INCLUDE_DIRS})
 set(SOURCE_PATH "${PROJECT_SOURCE_DIR}/src")
 set(TEST_PATH "${PROJECT_SOURCE_DIR}/tests")
 
-add_executable(bulk ${SOURCE_PATH}/main.cpp)
-#add_library(lib_print_ip ${SOURCE_PATH}/printip.cpp)
+add_executable(bulk ${SOURCE_PATH}/main.cpp
+                    ${SOURCE_PATH}/packet.cpp
+                    ${SOURCE_PATH}/observer.cpp
+)
+#add_library(libs ${SOURCE_PATH}/packet.h ${SOURCE_PATH}/observer.h)
 #add_executable(test_printip  ${TEST_PATH}/gtest.cpp)
 
 #target_link_libraries(print_ip lib_print_ip)
@@ -23,6 +26,7 @@ add_executable(bulk ${SOURCE_PATH}/main.cpp)
 
 set_target_properties(
     bulk
+#    libs
 #    test_printip
     PROPERTIES
         CXX_STANDARD 17
@@ -34,6 +38,8 @@ set_target_properties(
 #    PROPERTIES
 #        INCLUDE_DIRECTORIES ${SOURCE_PATH}
 #)
+
+#target_link_libraries(bulk PRIVATE libs)
 
 if (MSVC)
     target_compile_options(bulk PRIVATE
