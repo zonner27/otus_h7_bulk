@@ -1,4 +1,3 @@
-#include <iostream>
 #include "packet.h"
 #include "observer.h"
 

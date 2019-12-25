@@ -17,45 +17,26 @@ add_executable(bulk ${SOURCE_PATH}/main.cpp
                     ${SOURCE_PATH}/packet.cpp
                     ${SOURCE_PATH}/observer.cpp
 )
-#add_library(libs ${SOURCE_PATH}/packet.h ${SOURCE_PATH}/observer.h)
-#add_executable(test_printip  ${TEST_PATH}/gtest.cpp)
-
-#target_link_libraries(print_ip lib_print_ip)
-#find_package(Threads)
-#target_link_libraries(test_printip ${GTEST_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT} lib_print_ip)
+add_executable(test_bulk  ${TEST_PATH}/gtest.cpp
+                          ${SOURCE_PATH}/packet.cpp
+                          ${SOURCE_PATH}/observer.cpp
+)
+find_package(Threads)
+target_link_libraries(test_bulk ${GTEST_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
 
 set_target_properties(
     bulk
-#    libs
-#    test_printip
+    test_bulk
     PROPERTIES
         CXX_STANDARD 17
         CXX_STANDARD_REQUIRED ON
 )
 
-#set_target_properties(
-#    test_printip
-#    PROPERTIES
-#        INCLUDE_DIRECTORIES ${SOURCE_PATH}
-#)
-
-#target_link_libraries(bulk PRIVATE libs)
-
-if (MSVC)
-    target_compile_options(bulk PRIVATE
-        /W4
-    )
-#    target_compile_options(test_printip PRIVATE
-#       /W4
-#    )
-else ()
-    target_compile_options(bulk PRIVATE
-        -Wall -Wextra -pedantic -Werror
-    )
-#   target_compile_options(test_printip PRIVATE
-#       -Wall -Wextra -pedantic -Werror
-#    )
-endif()
+set_target_properties(
+    test_bulk
+    PROPERTIES
+        INCLUDE_DIRECTORIES ${SOURCE_PATH}
+)
 
 install(TARGETS bulk RUNTIME DESTINATION bin)
 
@@ -65,10 +46,10 @@ set(CPACK_PACKAGE_VERSION_MAJOR "${PROJECT_VERSION_MAJOR}")
 set(CPACK_PACKAGE_VERSION_MINOR "${PROJECT_VERSION_MINOR}")
 set(CPACK_PACKAGE_VERSION_PATCH "${PROJECT_VERSION_PATCH}")
 
-set(CPACK_PACKAGE_CONTACT zonner2785@gmail.com)
+set(CPACK_PACKAGE_CONTACT z@gmail.com)
 
 include(CPack)
 
-#enable_testing()
+enable_testing()
 
-#add_test(NAME test_printip COMMAND test_printip)
+add_test(NAME test_bulk COMMAND test_bulk)

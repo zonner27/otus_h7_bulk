@@ -1,3 +1,4 @@
+#pragma once
 #ifndef OBSERVER223224122019_H
 #define OBSERVER223224122019_H
 
@@ -14,7 +15,6 @@ public:
     virtual void update(const std::string &str_commands, const std::string &str_time) = 0;
 };
 
-
 class Cmd_Observer : public Observer
 {
 public:
@@ -22,14 +22,11 @@ public:
     void update(const std::string &str_commands, const std::string &str_time) override;
 };
 
-
 class File_Observer : public Observer
 {
 public:
     File_Observer(Packet *pack);
     void update(const std::string &str_commands, const std::string &str_time) override;
 };
-
-
 
 #endif //OBSERVER223224122019_H
